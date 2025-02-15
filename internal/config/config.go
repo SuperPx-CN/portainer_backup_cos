@@ -29,11 +29,11 @@ func Load() {
 		COSSecretKey:   os.Getenv("COS_SECRET_KEY"),
 		PortainerURL:   getEnv("PORTAINER_URL", "http://127.0.0.1:9000"),
 		PortainerToken: os.Getenv("PORTAINER_TOKEN"),
+		COSRegion:      getEnv("COS_REGION", "ap-guangzhou"),
 	}
 	loadBackupInterval()
 	loadBackupLimit()
 	loadCOSBucket()
-	loadCOSRegion()
 }
 
 func getEnv(key string, defaultValue string) string {
@@ -78,9 +78,6 @@ func GetCOSSecretKey() string {
 	return cfg.COSSecretKey
 }
 
-func loadCOSRegion() {
-	cfg.COSRegion = os.Getenv("COS_REGION")
-}
 func loadBackupLimit() {
 	cfg.BackupLimit, _ = strconv.Atoi(os.Getenv("BACKUP_LIMIT"))
 }
