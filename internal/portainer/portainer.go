@@ -5,13 +5,14 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"github.com/superpx-cn/portainer-backup-cos/internal/config"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
+
+	"github.com/superpx-cn/portainer-backup-cos/internal/config"
 )
 
 func Backup() string {

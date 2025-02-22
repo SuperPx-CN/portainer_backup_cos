@@ -1,42 +1,41 @@
 package config
 
 import (
-	"log"
 	"os"
 	"strconv"
 	"time"
 )
 
 type Config struct {
-	TZ             string
 	BackupInterval time.Duration
 	BackupLimit    int
 	COSBucket      string
 	COSRegion      string
 	COSSecretID    string
 	COSSecretKey   string
-	PortainerURL   string
 	PortainerToken string
+	PortainerURL   string
+	TZ             string
 }
 
 var cfg Config
 
-func Load() {
-	// init cfg
+func Setup() {
+
 	cfg = Config{
-		TZ:             getEnv("TZ", "UTC"),
-		COSSecretID:    os.Getenv("COS_SECRET_ID"),
-		COSSecretKey:   os.Getenv("COS_SECRET_KEY"),
-		PortainerURL:   getEnv("PORTAINER_URL", "http://127.0.0.1:9000"),
-		PortainerToken: os.Getenv("PORTAINER_TOKEN"),
-		COSRegion:      getEnv("COS_REGION", "ap-guangzhou"),
+		BackupInterval: parseBackupInterval(),
+		BackupLimit:    getIntEnv("BACKUP_LIMIT", 4321),
+		COSBucket:      getStringEnv("COS_BUCKET", "bucket-name"),
+		COSRegion:      getStringEnv("COS_REGION", "ap-guangzhou"),
+		COSSecretID:    getStringEnv("COS_SECRET_ID", ""),
+		COSSecretKey:   getStringEnv("COS_SECRET_KEY", ""),
+		PortainerToken: getStringEnv("PORTAINER_TOKEN", ""),
+		PortainerURL:   getStringEnv("PORTAINER_URL", "http://127.0.0.1:9000"),
+		TZ:             getStringEnv("TZ", "UTC"),
 	}
-	loadBackupInterval()
-	loadBackupLimit()
-	loadCOSBucket()
 }
 
-func getEnv(key string, defaultValue string) string {
+func getStringEnv(key string, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
 		return defaultValue
@@ -45,53 +44,50 @@ func getEnv(key string, defaultValue string) string {
 	return value
 }
 
-func GetTZ() string {
-	return cfg.TZ
+func getIntEnv(key string, defaultValue int) int {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+
+	result, _ := strconv.Atoi(value)
+	return result
 }
-func GetBackupLimit() int {
-	return cfg.BackupLimit
+
+func parseBackupInterval() time.Duration {
+	str := getStringEnv("BACKUP_INTERVAL", "10m")
+	duration, err := time.ParseDuration(str)
+	if err != nil {
+		duration = time.Minute * 10
+	}
+
+	return duration
 }
 
 func GetBackupInterval() time.Duration {
 	return cfg.BackupInterval
 }
-
-func GetPortainerURL() string {
-	return cfg.PortainerURL
+func GetBackupLimit() int {
+	return cfg.BackupLimit
 }
-func GetPortainerToken() string {
-	return cfg.PortainerToken
-}
-
 func GetCOSBucket() string {
 	return cfg.COSBucket
 }
-
 func GetCOSRegion() string {
 	return cfg.COSRegion
 }
-
-func GetCOSSecretId() string {
+func GetCOSSecretID() string {
 	return cfg.COSSecretID
 }
 func GetCOSSecretKey() string {
 	return cfg.COSSecretKey
 }
-
-func loadBackupLimit() {
-	cfg.BackupLimit, _ = strconv.Atoi(os.Getenv("BACKUP_LIMIT"))
+func GetPortainerToken() string {
+	return cfg.PortainerToken
 }
-func loadCOSBucket() {
-	cfg.COSBucket = os.Getenv("COS_BUCKET")
+func GetPortainerURL() string {
+	return cfg.PortainerURL
 }
-func loadBackupInterval() {
-	str := getEnv("BACKUP_INTERVAL", "10m")
-
-	duration, err := time.ParseDuration(str)
-	if err != nil {
-		duration = time.Minute * 10
-		log.Fatalf("解析 BACKUP_INTERVAL 失败: %v,使用默认值 %v", err, duration)
-	}
-
-	cfg.BackupInterval = duration
+func GetTZ() string {
+	return cfg.TZ
 }

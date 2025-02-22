@@ -2,10 +2,11 @@ package cos
 
 import (
 	"fmt"
-	"github.com/superpx-cn/portainer-backup-cos/internal/config"
-	"github.com/tencentyun/cos-go-sdk-v5"
 	"net/http"
 	"net/url"
+
+	"github.com/superpx-cn/portainer-backup-cos/internal/config"
+	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
 var Client *cos.Client
@@ -17,7 +18,7 @@ func SetUp() {
 
 	Client = cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
-			SecretID:  config.GetCOSSecretId(),
+			SecretID:  config.GetCOSSecretID(),
 			SecretKey: config.GetCOSSecretKey(),
 		},
 	})
