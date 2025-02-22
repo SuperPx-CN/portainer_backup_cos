@@ -2,16 +2,16 @@ package backup
 
 import (
 	"context"
-	"fmt"
-	"github.com/superpx-cn/portainer-backup-cos/internal/config"
-	"github.com/superpx-cn/portainer-backup-cos/internal/cos"
-	"github.com/superpx-cn/portainer-backup-cos/internal/portainer"
-	TencentCOS "github.com/tencentyun/cos-go-sdk-v5"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"time"
+
+	"github.com/superpx-cn/portainer-backup-cos/internal/config"
+	"github.com/superpx-cn/portainer-backup-cos/internal/cos"
+	"github.com/superpx-cn/portainer-backup-cos/internal/portainer"
+	TencentCOS "github.com/tencentyun/cos-go-sdk-v5"
 )
 
 func Run() {
@@ -20,15 +20,15 @@ func Run() {
 		if err != nil {
 			log.Fatalf("备份失败：%v", err)
 		}
-		log.Printf(filePath)
 
 		if filePath != "" {
-			storeBackup(filePath)
+			remotePath := storeBackup(filePath)
+
+			log.Printf("备份成功 %s", remotePath)
+			_ = os.Remove(filePath)
 		}
 		cleanBackups()
-		_ = os.Remove(filePath)
 
-		fmt.Println("备份成功……")
 		time.Sleep(config.GetBackupInterval())
 	}
 }
@@ -65,13 +65,15 @@ func cleanBackups() {
 
 }
 
-func storeBackup(filePath string) {
+func storeBackup(filePath string) string {
 	key := filepath.Base(filePath)
 
 	_, _, err := cos.Client.Object.Upload(context.Background(), key, filePath, nil)
 	if err != nil {
 		panic(err)
 	}
+
+	return key
 }
 
 // 创建备份

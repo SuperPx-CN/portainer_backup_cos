@@ -1,17 +1,18 @@
 package main
 
 import (
+	"time"
+
 	"github.com/superpx-cn/portainer-backup-cos/internal/backup"
 	"github.com/superpx-cn/portainer-backup-cos/internal/config"
 	"github.com/superpx-cn/portainer-backup-cos/internal/cos"
-	"log"
-	"time"
+	"github.com/superpx-cn/portainer-backup-cos/internal/log"
 )
 
 func main() {
-	config.Load()
+	log.SetUp()
+	config.Setup()
 
-	log.Printf("TZ %v", config.GetTZ())
 	var err error
 	time.Local, err = time.LoadLocation(config.GetTZ())
 	if err != nil {
