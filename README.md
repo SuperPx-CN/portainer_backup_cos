@@ -16,6 +16,8 @@ docker run -d \
 |-----------------|----------|-----------------------|----------------------------------|
 | BACKUP_INTERVAL | false    | 10m                   | The interval between each backup |
 | BACKUP_LIMIT    | false    | 4321                  | Save up to 'Limit' backup files  |
+| COS_BUCKET      | false    | bucket-name           | Tencent Cloud COS bucket name    |
+| COS_REGION      | false    | ap-guangzhou          | Tencent Cloud COS bucket region  |
 | PORTAINER_URL   | false    | http://127.0.0.1:9000 | Portainer url                    |
 
 
