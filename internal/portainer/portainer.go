@@ -15,6 +15,10 @@ import (
 	"github.com/superpx-cn/portainer-backup-cos/internal/config"
 )
 
+// Backup Download backup file from portainer
+//
+// return:
+//   - backup file path
 func Backup() string {
 	url := fmt.Sprintf("%s/api/backup", config.GetPortainerURL())
 

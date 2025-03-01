@@ -16,16 +16,13 @@ import (
 
 func Run() {
 	for {
-		filePath, err := backup()
-		if err != nil {
-			log.Fatalf("备份失败：%v", err)
-		}
+		localPath := portainer.Backup()
 
-		if filePath != "" {
-			remotePath := storeBackup(filePath)
+		if localPath != "" {
+			remotePath := storeBackup(localPath)
 
 			log.Printf("备份成功 %s", remotePath)
-			_ = os.Remove(filePath)
+			_ = os.Remove(localPath)
 		}
 		cleanBackups()
 
@@ -66,7 +63,7 @@ func cleanBackups() {
 }
 
 func storeBackup(filePath string) string {
-	key := filepath.Base(filePath)
+	key := filepath.Join(config.GetFolder(), filepath.Base(filePath))
 
 	_, _, err := cos.Client.Object.Upload(context.Background(), key, filePath, nil)
 	if err != nil {
@@ -74,10 +71,4 @@ func storeBackup(filePath string) string {
 	}
 
 	return key
-}
-
-// 创建备份
-func backup() (string, error) {
-	filePath := portainer.Backup()
-	return filePath, nil
 }

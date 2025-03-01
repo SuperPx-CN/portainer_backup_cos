@@ -13,6 +13,7 @@ type Config struct {
 	COSRegion      string
 	COSSecretID    string
 	COSSecretKey   string
+	Folder         string
 	PortainerToken string
 	PortainerURL   string
 	TZ             string
@@ -29,6 +30,7 @@ func Setup() {
 		COSRegion:      getStringEnv("COS_REGION", "ap-guangzhou"),
 		COSSecretID:    getStringEnv("COS_SECRET_ID", ""),
 		COSSecretKey:   getStringEnv("COS_SECRET_KEY", ""),
+		Folder:         getStringEnv("FOLDER", "/"),
 		PortainerToken: getStringEnv("PORTAINER_TOKEN", ""),
 		PortainerURL:   getStringEnv("PORTAINER_URL", "http://127.0.0.1:9000"),
 		TZ:             getStringEnv("TZ", "UTC"),
@@ -81,6 +83,9 @@ func GetCOSSecretID() string {
 }
 func GetCOSSecretKey() string {
 	return cfg.COSSecretKey
+}
+func GetFolder() string {
+	return cfg.Folder
 }
 func GetPortainerToken() string {
 	return cfg.PortainerToken
