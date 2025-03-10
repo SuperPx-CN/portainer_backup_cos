@@ -7,6 +7,7 @@ docker run -d \
   -e COS_BUCKET=bucket-name \
   -e COS_REGION=ap-guangzhou \
   -e COS_SECRET_ID=COS_SECRET_ID \
+  -e COS_SECRET_KEY=COS_SECRET_KEY \
   -e PORTAINER_URL=http://127.0.0.1:9000 \
   --name portainer_backup_cos \
   superpx/portainer_backup_cos
@@ -22,6 +23,7 @@ docker run -d \
 | COS_BUCKET      | true     | bucket-name           | Tencent Cloud COS bucket name    |
 | COS_REGION      | true     | ap-guangzhou          | Tencent Cloud COS bucket region  |
 | COS_SECRET_ID   | true     |                       | Tencent Cloud secret id          |
+| COS_SECRET_KEY  | true     |                       | Tencent Cloud secret key         |
 | PORTAINER_URL   | false    | http://127.0.0.1:9000 | Portainer url                    |
 
 
